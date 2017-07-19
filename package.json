@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/HiragYukina/TOKYO_game/issues"
   },
-  "homepage": "https://github.com/HiragYukina/TOKYO_game#readme"
+  "homepage": "https://github.com/HiragYukina/TOKYO_game#readme",
+  "dependencies": {
+    "pixi.js": "^4.5.3"
+  }
 }
