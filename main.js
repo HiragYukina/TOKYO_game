@@ -1,4 +1,4 @@
-require('pixi.js'); //pixi.js ver 4.3.0
+require("node_modules/pixi.js"); //pixi.js ver 4.3.0
 
 (function() {
 

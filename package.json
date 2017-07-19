@@ -1,0 +1,19 @@
+{
+  "name": "fabre-pixi-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiragYukina/TOKYO_game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HiragYukina/TOKYO_game/issues"
+  },
+  "homepage": "https://github.com/HiragYukina/TOKYO_game#readme"
+}
