@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HiragYukina/TOKYO_game#readme",
   "dependencies": {
-    "pixi.js": "^4.5.3"
+    "pixi.js": "^4.5.3",
+    "tween.js": "^16.6.0"
   }
 }
