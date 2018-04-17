@@ -1,17 +1,27 @@
 var gameMode = "game"
   var usa,
     mainUsa,
-    map,
-    ber,
-    s_ber;
+    ground,
+    ase,
+    hage;
+  var layers,
+    map_width,
+    map_height,
+    tile_rect_w,
+    tile_rect_h;
   var width = 800,
     height = 450;
+  var x0 = -700;
+  var y0 = -900;
+  var plyer;
+  var score;
+  var title;
   var renderOption = {
     antialiasing: false,
     transparent: false,
     resolution: window.devicePixeRatio,
     autoResize: true,
-    backgroundColor: 0x000000
+    backgroundColor: 0xffffff
   }
   var renderer = PIXI.autoDetectRenderer(width, height, renderOption);
   renderer.view.style.position = "absolute";
@@ -25,8 +35,7 @@ var gameMode = "game"
   window.addEventListener("resize", resize);
 
   function init() {
-    PIXI.loader.add("images/usa.png").add("images/hapirabi0.png").load(setup);
-    requestAnimationFrame(animate);
+    PIXI.loader.add("images/usa.png").add("images/hapi_hu.png").add("images/hapi_hazusi.png").add("images/hapirabi100.png").add("images/hapirabi75.png").add("images/hapirabi50.png").add("images/hapirabi25.png").add("images/kodomo.png").add("images/kodomo_hu.png").add("images/otona.png").add("images/map1.png").add("images/ase.png").add("images/title.png").add("images/start.png").add("images/stop.png").add("images/hapirabi_map.png").load(setup);
     resize();
     //JSONロード
     (function(loadingMap) {
@@ -37,31 +46,91 @@ var gameMode = "game"
       map.send(null);
     }(function loadingMap(event) {
       var loadmap = event.target;
-      map = JSON.parse(loadmap.responseText);
-      console.log("JSON読み込み完了", map);
-      var maplist = map.layers[1].data;
+      var map = JSON.parse(loadmap.responseText);
+      //stage抽出
+      layers = map.layers;
+
+      //マップの横幅
+      map_width = map.width;
+      //マップの高さ
+      map_height = map.height;
+      //タイルの幅
+      tile_rect_w = map.tilewidth;
+      //タイルの高さ
+      tile_rect_h = map.tileheight;
+
     }));
+    requestAnimationFrame(animate);
+  }
+  //ステージ生成
+  function stageinit() {
+    var map_id = [0];
+    for (var i = 0; i < layers.length; i++) {
+      var map = layers[i];
+      for (var y = 0; y < 100; y++) {
+        for (var x = 0; x < 100; x++) {
+          var j = x + (y * 100);
+          //サイズ(48,48)
+          var tile = [tile_rect_w, tile_rect_h];
+          var map.data[j]
+        }
+      }
+    }
+
   }
   //画像読み込み
   function setup() {
-    usa = new PIXI.Sprite(PIXI.loader.resources["images/usa.png"].texture),
-    mainUsa = new PIXI.Sprite(PIXI.loader.resources["images/hapirabi0.png"].texture);
-    //ここは後で消す
-    ber = new PIXI.Graphics();
-    ber.beginFill(0x199fff, 1);
-    ber.lineStyle(5, 0xffffff);
-    ber.drawRect(10, 10, f, 20);
-    s_ber = new PIXI.Graphics();
-    s_ber.beginFill(0xffff00, 1);
-    s_ber.lineStyle(5, 0xffffff);
-    s_ber.drawRect(10, 30, s, 20);
-    //
-    usa.position.set(width / 2, height / 2);
-    mainUsa.position.set(540, 0);
+    player = new PIXI.Sprite(PIXI.loader.resources["images/hapirabi_map.png"].texture);
+    player.position.set(x0, y0)
+
+    var hageusa = PIXI.utils.TextureCache["images/hapi_hazusi.png"];
+    var hagerect = new PIXI.Rectangle(270, 0, 270, 450);
+    hageusa.frame = hagerect;
+    hage = new PIXI.Sprite(hageusa);
+    hage.position.set(520, 0);
+    //大きいうさぎ
+    var B_usa = PIXI.utils.TextureCache["images/hapirabi100.png"];
+    var rect = new PIXI.Rectangle(0, 0, 270, 450);
+    B_usa.frame = rect;
+    mainUsa = new PIXI.Sprite(B_usa);
+    mainUsa.position.set(520, 0);
+    //プレイヤー
+    //var player = PIXI.utils.TextureCache["images/usa.png"];
+    var frames = [];
+    var pattern = [0, 1, 0, 2];
+    for (var i = 0; i < pattern.length; i++) {
+      var usarect = new PIXI.Rectangle(pattern[i] * 48, 0, 48, 48);
+      var texture = new PIXI.Texture(PIXI.utils.TextureCache["images/usa.png"]);
+      texture.frame = usarect;
+      frames.push(texture);
+    }
+    usa = new PIXI.extras.AnimatedSprite(frames);
+    usa.animationSpeed = 0.1;
+    usa.play();
+    usa.position.set(x, y);
+
+    //汗
+    var a = PIXI.utils.TextureCache["images/ase.png"];
+    var arect = new PIXI.Rectangle(0, 0, 270, 450);
+    a.frame = arect;
+    ase = new PIXI.Sprite(a);
+    ase.position.set(520, 0);
+
+    //スコア
+    score = new PIXI.Text(b, {fill: "#000000"});
+    score.position.x = 0;
+    score.position.y = 10;
+
+    title = new PIXI.Sprite(PIXI.loader.resources["images/title.png"].texture);
+    stage.addChild(player);
+    stage.addChild(usa);
+    stage.addChild(mainUsa);
+    stage.addChild(ase);
+
+    stageinit();
   }
 
   function animate() {
-    stage.removeChildren();
     requestAnimationFrame(animate);
     render();
     renderer.render(stage);
@@ -70,9 +139,13 @@ var gameMode = "game"
   function render() {
 
     switch (gameMode) {
+      case "title":
+        titleRender();
+        break;
       case "game":
         gameRender();
         gameKey();
+        //  gamestag();
         break;
       case "end":
         endRender();

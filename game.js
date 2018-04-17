@@ -1,7 +1,8 @@
 var speed = 3;
-var f = 100,
-  s = 100,
-  x = 0;
+var x = width / 3,
+  y = height / 2;
+var b = 0,
+  s = 0;
 var keystate = {
   "w": false,
   "d": false,
@@ -9,44 +10,34 @@ var keystate = {
   "a": false,
   "e": false
 }
-function gameRender() {
-  stage.addChild(usa);
-  stage.addChild(mainUsa);
-  ber.drawRect(10, 10, f, 20);
-  stage.addChild(ber);
-  s_ber.drawRect(10, 30, s, 20);
-  stage.addChild(s_ber);
-}
-function player() {
-  x++;
-  if (x == 10) {
-    f -= 1 + (s % 5);
-    x = 0;
-    s--;
-  }
-}
-
+function gameRender() {}
 //プレイヤー移動
 function gameKey() {
-  if (0 <= usa.position.x <= width) {
-    if (keystate["w"]) {
-      usa.position.y -= speed;
-      player();
-    }
-    if (keystate["s"]) {
-      usa.position.y += speed;
-      player();
-    }
-    if (keystate["d"]) {
-      usa.position.x += speed;
-      player();
-    }
-    if (keystate["a"]) {
-      usa.position.x -= speed;
-      player();
-    }
-    if (keystate["e"]) {} else {}
+  if (keystate["w"]) {
+    player.position.y += 2;
   }
+  if (keystate["s"]) {
+    player.position.y -= 2;
+  }
+  if (keystate["d"]) {
+    mainUsa.alpha = 0.5;
+    ase.alpha = 0.5;
+    player.position.x -= 2;
+  }
+  if (keystate["a"]) {
+    player.position.x += 2;
+  }
+
+  if (keystate["d"] == false) {
+    if (mainUsa) {
+      mainUsa.alpha = 1;
+    }
+  }
+  if (keystate["e"]) {
+    stage.addChild(hage);
+    stage.removeChild(mainUsa);
+  }
+
 }
 
 //キーイベント

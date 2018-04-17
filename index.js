@@ -1,16 +1,16 @@
-var renderer = PIXI.autoDetectRenderer(256, 256);
+var pixiTiled
 
-// それをHTMLファイルに入れる
+var renderer = PIXI.autoDetectRenderer(1024, 768);
 document.body.appendChild(renderer.view);
 
-// stageという名前の容器（オプジェクト）を作る
-var stage = new PIXI.Container();
-
-PIXI.loader.add("images/usa.png").load(setup);
-
-function setup() {
-  var usa = new PIXI.Sprite(PIXI.loader.resources["images/usa.png"].texture);
-  stage.addChild(usa);
-  renderer.render(stage);
-}
-// レンダラーにstageを受け入れてって伝える
+/**
+ * Simply load a Tiled map in TMX format like a usual resource
+ */
+PIXI.loader.add('images/hapirabi_map.tmx').load(function() {
+  /**
+        *   PIXI.extras.TiledMap() is an extended PIXI.Container()
+        *   so you can render it right away
+        */
+  var tileMap = new PIXI.extras.TiledMap("images/hapirabi_map.tmx");
+  renderer.render(tileMap);
+});
