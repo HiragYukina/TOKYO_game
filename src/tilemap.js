@@ -103,7 +103,7 @@ export class TileMap {
 
     /**
      * マップデータの解析
-     * @param {} data マップデータ
+     * @param {Object} data マップデータ
      */
     _parse(data) {
         this.layers = data.layers
