@@ -90,7 +90,8 @@ export class TileMap {
                         continue
                     }
 
-                    const id = this.layers[layerId].data[index] - 1
+                    const layer = this.layers[layerId]
+                    const id = layer.data[index] - 1
                     if (id == -1) {
                         continue;
                     }
@@ -107,6 +108,10 @@ export class TileMap {
                     }
 
                     const tileset = this.tilesets[tilesetId]
+                    if (startTileX + x < 0 || startTileX + x > layer.width - 1 || startTileY + y < 0 || startTileY + y > layer.height - 1) {
+                        continue
+                    } 
+
                     const sx = (id % tileset.columns) * this.tilewidth
                     const sy = Math.floor(id / tileset.columns) * this.tileheight
 
