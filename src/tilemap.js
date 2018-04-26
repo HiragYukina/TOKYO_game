@@ -72,6 +72,8 @@ export class TileMap {
         const canvas = ctx.canvas
         const screenLeft = camera.x - canvas.width / 2
         const screenTop = camera.y - canvas.height / 2
+        const offsetX = screenLeft >= 0 ? screenLeft % this.tilewidth : this.tilewidth - 1 - (Math.abs(screenLeft + 1) % this.tilewidth)
+        const offsetY = screenTop >= 0 ? screenTop % this.tileheight : this.tileheight - 1 - (Math.abs(screenTop + 1) % this.tileheight)
 
         const startTileX = Math.floor(screenLeft / this.tilewidth)
         const startTileY = Math.floor(screenTop / this.tileheight)
@@ -93,8 +95,8 @@ export class TileMap {
                         continue;
                     }
 
-                    const dx = x * this.tilewidth - screenLeft % this.tilewidth
-                    const dy = y * this.tileheight - screenTop % this.tileheight
+                    const dx = x * this.tilewidth - offsetX
+                    const dy = y * this.tileheight - offsetY
 
                     let tilesetId = 0
                     while (true) {
@@ -107,7 +109,6 @@ export class TileMap {
                     const tileset = this.tilesets[tilesetId]
                     const sx = (id % tileset.columns) * this.tilewidth
                     const sy = Math.floor(id / tileset.columns) * this.tileheight
-
 
                     const image = Asset.images[this.tilesets[tilesetId].imagePath]
                     ctx.drawImage(image, sx, sy, this.tilewidth, this.tileheight, dx, dy, this.tilewidth, this.tileheight)
