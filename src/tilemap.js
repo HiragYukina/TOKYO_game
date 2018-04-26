@@ -40,6 +40,10 @@ export class TileMap {
                             const path = imageElement.getAttribute("source")
                             const filename = path.match(/([^\/]+?)?$/)[0]
                             tileset.imagePath = filename
+
+                            const tilesetElement = xml.querySelector("tileset")
+                            tileset.columns = parseInt(tilesetElement.getAttribute("columns"))
+
                             Asset.register([
                                 {
                                     type: "image",
@@ -76,13 +80,19 @@ export class TileMap {
         const tileScreenHeight = canvas.height / this.tileheight
 
         for (let layerId = 0; layerId < this.layers.length; layerId++) {
-            for (let y = 0; y < tileScreenHeight; y++) {
-                for (let x = 0; x < tileScreenWidth; x++) {
+            for (let y = 0; y < tileScreenHeight + 1; y++) {
+                for (let x = 0; x < tileScreenWidth + 1; x++) {
+
                     const index = startTileX + x + (startTileY + y) * this.width
+                    if (index < 0) {
+                        continue
+                    }
 
                     const id = this.layers[layerId].data[index] - 1
-                    const sx = (id % 20) * this.tilewidth
-                    const sy = Math.floor(id / 15) * this.tileheight
+                    if (id == -1) {
+                        continue;
+                    }
+
                     const dx = x * this.tilewidth - screenLeft % this.tilewidth
                     const dy = y * this.tileheight - screenTop % this.tileheight
 
@@ -93,6 +103,11 @@ export class TileMap {
                         }
                         tilesetId++
                     }
+
+                    const tileset = this.tilesets[tilesetId]
+                    const sx = (id % tileset.columns) * this.tilewidth
+                    const sy = Math.floor(id / tileset.columns) * this.tileheight
+
 
                     const image = Asset.images[this.tilesets[tilesetId].imagePath]
                     ctx.drawImage(image, sx, sy, this.tilewidth, this.tileheight, dx, dy, this.tilewidth, this.tileheight)
