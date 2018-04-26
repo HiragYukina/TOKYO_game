@@ -1,15 +1,17 @@
 //HTML読み込み完了
 window.addEventListener("DOMContentLoaded", init)
 
-//初期化
-function init() {
+/**
+ * 初期化
+ */
+const init = () => {
   //キャンパス要素
   canvas = document.getElementById("maincanvas")
   ctx = canvas.getContext("2d")
   //マップタイル読み込み
   image = new Image()
   image.src = "images/map1.png"
-  image.addEventListener("load", function() {
+  image.addEventListener("load", () => {
     //chromeのバグ回避
     let backcanvas = document.createElement("canvas")
     backcanvas.width = 960
@@ -21,13 +23,18 @@ function init() {
 
   //マップ
   //読み込み
-  mapload(function(event) {
-    loadmap(event);
-    requestAnimationFrame(updata)
+  mapload(event => {
+    loadmap(event)
+    requestAnimationFrame(update)
   })
 }
 
-function mapload(onload) {
+
+/**
+ * マップの読み込み
+ * @param {Function} onload 
+ */
+const mapload = onload => {
   //JSON読み込み
   var map = new XMLHttpRequest
 
@@ -35,7 +42,12 @@ function mapload(onload) {
   map.open("GET", "images/hapirabi_map.json", true)
   map.send(null)
 }
-function loadmap(event) {
+
+/**
+ * マップデータの解析
+ * @param {Event} event 
+ */
+function parseMapData(event) {
   var loadmap = event.target
   var mainmap = JSON.parse(loadmap.responseText)
 
@@ -54,8 +66,11 @@ function loadmap(event) {
   heightMax = map.height * tile.height
 }
 
-function renderMap() {
 
+/**
+ * マップの描画
+ */
+function renderMap() {
   const screenLeft = camera.x - screenWidth / 2
   const screenTop = camera.y - screenHeight / 2
   //描画開始位置
@@ -80,14 +95,21 @@ function renderMap() {
       }
     }
   }
-
 }
 
-function updata() {
-  requestAnimationFrame(updata)
+
+/**
+ * 更新
+ */
+function update() {
+  requestAnimationFrame(update)
   render()
 }
 
+
+/**
+ * 描画
+ */
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   switch (gamemode) {
