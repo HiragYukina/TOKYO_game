@@ -72,7 +72,13 @@ export class TileMap {
         const canvas = ctx.canvas
         const screenLeft = camera.x - canvas.width / 2
         const screenTop = camera.y - canvas.height / 2
-        const offsetX = screenLeft >= 0 ? screenLeft % this.tilewidth : this.tilewidth - 1 - (Math.abs(screenLeft + 1) % this.tilewidth)
+        const offsetX = (() => {
+            if (screenLeft >= 0) {
+                return screenLeft % this.tilewidth
+            } else {
+                return this.tilewidth - 1 - (Math.abs(screenLeft + 1) % this.tilewidth)
+            }
+        })()
         const offsetY = screenTop >= 0 ? screenTop % this.tileheight : this.tileheight - 1 - (Math.abs(screenTop + 1) % this.tileheight)
 
         const startTileX = Math.floor(screenLeft / this.tilewidth)
