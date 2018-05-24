@@ -1,5 +1,5 @@
 import {createStore} from "./engine/store.js"
-import {Tilemap} from "./tilemap.js"
+import {Tilemap} from "./engine/tilemap.js"
 
 let canvas
 let ctx
