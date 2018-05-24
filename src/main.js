@@ -49,6 +49,9 @@ const reducerKey = (state, action) => {
         ...key,
         down: action.state
       }
+      break
+    default:
+      return key
   }
 }
 
