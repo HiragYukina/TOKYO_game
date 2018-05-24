@@ -1,11 +1,9 @@
 import {createStore} from "./engine/store.js"
-import {TileMap} from "./tilemap.js"
+import {Tilemap} from "./tilemap.js"
 
 let canvas
 let ctx
 let gamemode = "game"
-
-const tilemap = new TileMap
 
 const INITIAL_STATE = {
   key: {
@@ -23,6 +21,7 @@ const INITIAL_STATE = {
 
 const UPDATE = Symbol("update")
 const KEY = Symbol("key")
+const TILEMAP = Symbol("tilemap")
 
 const reducerKey = (state, action) => {
   const key = state.key
@@ -94,6 +93,12 @@ const reducer = (state, action) => {
         key: reducerKey(state, action)
       }
       break
+    case TILEMAP:
+      return {
+        ...state,
+        tilemap: action.tilemap
+      }
+      break
     default:
       return state
       break
@@ -116,6 +121,13 @@ const keyAction = (key, state) => {
   }
 }
 
+const tilemapAction = (tilemap) => {
+  return {
+    type: TILEMAP,
+    tilemap
+  }
+}
+
 /**
  * 初期化
  */
@@ -125,9 +137,11 @@ const init = () => {
   ctx = canvas.getContext("2d")
 
   // タイルマップの読み込み
-  tilemap.load("./images/hapirabi_map.json").then(() => {
-    update(store, 0)
+  Tilemap.create("./images/hapirabi_map.json").then((tilemap) => {
+    store.dispatch(tilemapAction(tilemap))
   })
+
+  update(store, 0)
 }
 
 //HTML読み込み完了
@@ -153,7 +167,9 @@ function render(state) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   switch (gamemode) {
     case "game":
-      tilemap.render(ctx, state.camera)
+      if (state.tilemap) {
+        Tilemap.render(ctx, state.tilemap, state.camera)
+      }
       break;
   }
 
