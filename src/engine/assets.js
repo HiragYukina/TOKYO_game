@@ -46,7 +46,7 @@ Asset.sounds = {};
 Asset.register = function(assets) {
 
   if (assets.constructor.name !== 'Array') {
-    console.warn('Asset.register: アセット情報としてArray以外のパラメータが渡された ' + assets);
+    console.warn('Asset.register: アセット情報としてArray以外のパラメータが渡された' + assets);
     return;
   }
   Asset.assets = Asset.assets.concat(assets);
